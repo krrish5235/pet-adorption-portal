@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8"/>
+  <title>Add Pet</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"/>
+</head>
+<body>
+<div class="container py-4">
+  <h2>Add New Pet</h2>
+  <form th:action="@{/add}" th:object="${pet}" method="post">
+    <div class="mb-3"><label>Name</label><input th:field="*{name}" class="form-control" required/></div>
+    <div class="mb-3"><label>Breed</label><input th:field="*{breed}" class="form-control"/></div>
+    <div class="mb-3"><label>Species</label><input th:field="*{species}" class="form-control"/></div>
+    <div class="mb-3"><label>Age</label><input th:field="*{age}" class="form-control"/></div>
+    <div class="mb-3"><label>Gender</label><input th:field="*{gender}" class="form-control"/></div>
+    <div class="mb-3"><label>Image URL</label><input th:field="*{imageUrl}" class="form-control" placeholder="https://..."/></div>
+    <div class="mb-3"><label>Description</label><textarea th:field="*{description}" class="form-control"></textarea></div>
+    <button class="btn btn-success">Save</button>
+    <a href="/pets" class="btn btn-secondary">Cancel</a>
+  </form>
+</div>
+</body>
+</html>

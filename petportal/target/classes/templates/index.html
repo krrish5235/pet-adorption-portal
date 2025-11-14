@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8"/>
+  <title>Pet Adoption Portal</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"/>
+</head>
+<body class="bg-light">
+<div class="container py-4">
+  <h1 class="mb-3">Available Pets</h1>
+  <div class="mb-3">
+    <a href="add.html" class="btn btn-primary">Add Pet</a>
+    <a href="pets.html" class="btn btn-secondary">All Pets</a>
+    <a href="/admin/applications" class="btn btn-outline-dark">Admin: Applications</a>
+  </div>
+
+  <div class="row" th:if="${available}">
+    <div class="col-md-4 mb-3" th:each="pet : ${available}">
+      <div class="card h-100">
+        <img th:src="${pet.imageUrl}" class="card-img-top" style="height:220px; object-fit:cover;" alt="pet">
+        <div class="card-body">
+          <h5 th:text="${pet.name} + ' (' + pet.species + ')'">Name</h5>
+          <p th:text="${pet.description}">Desc</p>
+          <a th:href="@{/pets/{id}(id=${pet.id})}" class="btn btn-sm btn-primary">View</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

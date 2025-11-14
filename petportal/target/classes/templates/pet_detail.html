@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8"/>
+  <title>Pet Detail</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"/>
+</head>
+<body>
+<div class="container py-4">
+  <a href="/pets" class="btn btn-link">← Back to pets</a>
+  <div class="row">
+    <div class="col-md-6">
+      <img th:src="${pet.imageUrl}" class="img-fluid" style="max-height:420px; object-fit:cover;"/>
+    </div>
+    <div class="col-md-6">
+      <h2 th:text="${pet.name}">Pet</h2>
+      <p><strong>Breed:</strong> <span th:text="${pet.breed}"/></p>
+      <p><strong>Species:</strong> <span th:text="${pet.species}"/></p>
+      <p><strong>Age:</strong> <span th:text="${pet.age}"/></p>
+      <p><strong>Gender:</strong> <span th:text="${pet.gender}"/></p>
+      <p><strong>Status:</strong> <span th:text="${pet.status}"/></p>
+      <p th:text="${pet.description}">desc</p>
+
+      <a th:href="@{/apply/{petId}(petId=${pet.id})}" class="btn btn-success" th:if="${pet.status == 'Available'}">Apply to Adopt</a>
+      <span class="badge bg-warning" th:if="${pet.status != 'Available'}" th:text="${pet.status}">Pending</span>
+    </div>
+  </div>
+
+  <hr/>
+  <h4>Applications</h4>
+  <div th:if="${applications.size() == 0}">No applications yet.</div>
+  <div th:each="app : ${applications}" class="card mb-2">
+    <div class="card-body">
+      <h5 th:text="${app.applicantName}">Name</h5>
+      <p><strong>Email:</strong> <span th:text="${app.email}"></span></p>
+      <p><strong>Phone:</strong> <span th:text="${app.phone}"></span></p>
+      <p><strong>Status:</strong> <span th:text="${app.status}"></span></p>
+      <p th:text="${app.message}"></p>
+    </div>
+  </div>
+</div>
+</body>
+</html>

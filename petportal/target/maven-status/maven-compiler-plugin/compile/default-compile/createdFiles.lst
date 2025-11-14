@@ -1,0 +1,8 @@
+com\example\petportal\service\PetService.class
+com\example\petportal\service\AdoptionApplicationService.class
+com\example\petportal\repository\AdoptionApplicationRepository.class
+com\example\petportal\PetPortalApplication.class
+com\example\petportal\model\Pet.class
+com\example\petportal\model\AdoptionApplication.class
+com\example\petportal\repository\PetRepository.class
+com\example\petportal\controller\PetController.class

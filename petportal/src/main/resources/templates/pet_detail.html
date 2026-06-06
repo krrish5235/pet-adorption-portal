@@ -1,43 +1,76 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
   <meta charset="UTF-8"/>
-  <title>Pet Detail</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title th:text="${pet.name} + ' — PawFind'">Pet Detail</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" th:href="@{/css/styles.css}"/>
 </head>
 <body>
-<div class="container py-4">
-  <a href="/pets" class="btn btn-link">← Back to pets</a>
-  <div class="row">
-    <div class="col-md-6">
-      <img th:src="${pet.imageUrl}" class="img-fluid" style="max-height:420px; object-fit:cover;"/>
-    </div>
-    <div class="col-md-6">
-      <h2 th:text="${pet.name}">Pet</h2>
-      <p><strong>Breed:</strong> <span th:text="${pet.breed}"/></p>
-      <p><strong>Species:</strong> <span th:text="${pet.species}"/></p>
-      <p><strong>Age:</strong> <span th:text="${pet.age}"/></p>
-      <p><strong>Gender:</strong> <span th:text="${pet.gender}"/></p>
-      <p><strong>Status:</strong> <span th:text="${pet.status}"/></p>
-      <p th:text="${pet.description}">desc</p>
 
-      <a th:href="@{/apply/{petId}(petId=${pet.id})}" class="btn btn-success" th:if="${pet.status == 'Available'}">Apply to Adopt</a>
-      <span class="badge bg-warning" th:if="${pet.status != 'Available'}" th:text="${pet.status}">Pending</span>
+<nav class="nav">
+  <a href="/" class="nav-brand"><span>🐾</span> PawFind</a>
+  <div class="nav-links">
+    <a href="/">Home</a>
+    <a href="/pets">All Pets</a>
+    <a href="/add">Add Pet</a>
+    <a href="/admin/applications">Admin</a>
+  </div>
+</nav>
+
+<div class="container">
+  <a href="/pets" class="back-link">← Back to all pets</a>
+
+  <div class="detail-grid">
+    <div>
+      <img th:src="${pet.imageUrl}" class="detail-img" alt="pet photo"
+           onerror="this.src='https://placehold.co/600x450/f3f4f6/9ca3af?text=No+Photo'"/>
+    </div>
+    <div class="detail-info">
+      <div style="display:flex; align-items:center; gap:12px; margin-bottom:0.5rem;">
+        <h2 th:text="${pet.name}">Pet name</h2>
+        <span class="badge badge-available"
+              th:classappend="${pet.status == 'Available'} ? 'badge-available' : (${pet.status == 'Pending'} ? 'badge-pending' : 'badge-adopted')"
+              th:text="${pet.status}">Available</span>
+      </div>
+      <p style="color:#6b7280; margin-bottom:1rem;" th:text="${pet.description}">Description</p>
+
+      <table class="info-table">
+        <tr><td>Species</td><td th:text="${pet.species}">—</td></tr>
+        <tr><td>Breed</td><td th:text="${pet.breed}">—</td></tr>
+        <tr><td>Age</td><td th:text="${pet.age}">—</td></tr>
+        <tr><td>Gender</td><td th:text="${pet.gender}">—</td></tr>
+      </table>
+
+      <a th:href="@{/apply/{petId}(petId=${pet.id})}" class="btn btn-success"
+         th:if="${pet.status == 'Available'}" style="width:100%; justify-content:center; margin-top:0.5rem;">
+        🐾 Apply to adopt
+      </a>
+      <div th:if="${pet.status != 'Available'}" style="background:#f3f4f6; border-radius:8px; padding:12px; text-align:center; color:#6b7280; font-size:0.875rem; margin-top:0.5rem;">
+        This pet is currently <strong th:text="${pet.status}">not available</strong>
+      </div>
     </div>
   </div>
 
-  <hr/>
-  <h4>Applications</h4>
-  <div th:if="${applications.size() == 0}">No applications yet.</div>
-  <div th:each="app : ${applications}" class="card mb-2">
-    <div class="card-body">
-      <h5 th:text="${app.applicantName}">Name</h5>
-      <p><strong>Email:</strong> <span th:text="${app.email}"></span></p>
-      <p><strong>Phone:</strong> <span th:text="${app.phone}"></span></p>
-      <p><strong>Status:</strong> <span th:text="${app.status}"></span></p>
-      <p th:text="${app.message}"></p>
+  <div style="margin-top:2.5rem;">
+    <h3 style="font-size:1.25rem; font-weight:700; margin-bottom:1rem;">Applications</h3>
+    <div th:if="${applications.size() == 0}" class="empty" style="background:#fff; border:1px solid #e5e7eb; border-radius:12px;">
+      <div class="empty-icon">📋</div>
+      <h3>No applications yet</h3>
+    </div>
+    <div th:each="app : ${applications}" class="app-card">
+      <div style="display:flex; justify-content:space-between; align-items:start;">
+        <div>
+          <h4 th:text="${app.applicantName}">Name</h4>
+          <p style="font-size:0.8rem; color:#9ca3af;" th:text="${app.email}">email</p>
+        </div>
+        <span class="badge badge-pending" th:text="${app.status}">Status</span>
+      </div>
+      <p style="font-size:0.875rem; color:#4b5563; margin-top:8px;" th:text="${app.message}">Message</p>
     </div>
   </div>
 </div>
+
 </body>
 </html>

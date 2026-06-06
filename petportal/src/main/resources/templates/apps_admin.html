@@ -1,39 +1,75 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
   <meta charset="UTF-8"/>
-  <title>Admin Applications</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Admin — PawFind</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" th:href="@{/css/styles.css}"/>
 </head>
-<body class="bg-light">
-<div class="container py-4">
-  <h2>Applications (Admin)</h2>
-  <a href="/pets" class="btn btn-link">← Back to pets</a>
-  <table class="table table-striped mt-3">
-    <thead>
-      <tr><th>Applicant</th><th>Pet ID</th><th>Email</th><th>Phone</th><th>Status</th><th>Action</th></tr>
-    </thead>
-    <tbody>
-      <tr th:each="a : ${apps}">
-        <td th:text="${a.applicantName}">name</td>
-        <td th:text="${a.petId}">pet</td>
-        <td th:text="${a.email}">email</td>
-        <td th:text="${a.phone}">phone</td>
-        <td th:text="${a.status}">status</td>
-        <td>
-          <form th:action="@{/admin/applications/{id}/status(id=${a.id})}" method="post" class="d-inline">
-            <select name="status" class="form-select d-inline-block" style="width:160px;">
-              <option value="Submitted" th:selected="${a.status=='Submitted'}">Submitted</option>
-              <option value="Under Review" th:selected="${a.status=='Under Review'}">Under Review</option>
-              <option value="Approved" th:selected="${a.status=='Approved'}">Approve</option>
-              <option value="Rejected" th:selected="${a.status=='Rejected'}">Reject</option>
-            </select>
-            <button class="btn btn-sm btn-primary">Update</button>
-          </form>
-        </td>
-      </tr>
-    </tbody>
-  </table>
+<body>
+
+<nav class="nav">
+  <a href="/" class="nav-brand"><span>🐾</span> PawFind</a>
+  <div class="nav-links">
+    <a href="/">Home</a>
+    <a href="/pets">All Pets</a>
+    <a href="/add">Add Pet</a>
+    <a href="/admin/applications" class="active">Admin</a>
+  </div>
+</nav>
+
+<div class="container">
+  <div class="page-header">
+    <h2>📋 Applications</h2>
+    <a href="/pets" class="btn btn-outline">← Back to pets</a>
+  </div>
+
+  <div class="table-wrap" th:if="${not #lists.isEmpty(apps)}">
+    <table>
+      <thead>
+        <tr>
+          <th>Applicant</th>
+          <th>Pet ID</th>
+          <th>Email</th>
+          <th>Phone</th>
+          <th>Status</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr th:each="a : ${apps}">
+          <td style="font-weight:600;" th:text="${a.applicantName}">Name</td>
+          <td style="color:#9ca3af; font-size:0.8rem; font-family:monospace;" th:text="${a.petId}">id</td>
+          <td th:text="${a.email}">email</td>
+          <td th:text="${a.phone}">phone</td>
+          <td>
+            <span class="badge"
+                  th:classappend="${a.status == 'Approved'} ? 'badge-available' : (${a.status == 'Rejected'} ? 'badge-adopted' : 'badge-pending')"
+                  th:text="${a.status}">Status</span>
+          </td>
+          <td>
+            <form th:action="@{/admin/applications/{id}/status(id=${a.id})}" method="post" style="display:flex; gap:8px; align-items:center;">
+              <select name="status" class="status-select">
+                <option value="Submitted" th:selected="${a.status=='Submitted'}">Submitted</option>
+                <option value="Under Review" th:selected="${a.status=='Under Review'}">Under Review</option>
+                <option value="Approved" th:selected="${a.status=='Approved'}">Approve</option>
+                <option value="Rejected" th:selected="${a.status=='Rejected'}">Reject</option>
+              </select>
+              <button type="submit" class="btn btn-primary btn-sm">Update</button>
+            </form>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="empty" th:if="${#lists.isEmpty(apps)}" style="background:#fff; border:1px solid #e5e7eb; border-radius:12px;">
+    <div class="empty-icon">📋</div>
+    <h3>No applications yet</h3>
+    <p>Applications will appear here once people apply.</p>
+  </div>
 </div>
+
 </body>
 </html>

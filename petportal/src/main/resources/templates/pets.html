@@ -1,27 +1,51 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
   <meta charset="UTF-8"/>
-  <title>All Pets</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>All Pets — PawFind</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" th:href="@{/css/styles.css}"/>
 </head>
-<body class="bg-light">
-<div class="container py-4">
-  <h2>All Pets</h2>
-  <a href="/add" class="btn btn-primary mb-3">Add Pet</a>
-  <div class="row">
-    <div class="col-md-4 mb-3" th:each="pet : ${pets}">
-      <div class="card">
-        <img th:src="${pet.imageUrl}" class="card-img-top" style="height:220px;object-fit:cover;"/>
-        <div class="card-body">
-          <h5 th:text="${pet.name}">Name</h5>
-          <p><strong>Breed:</strong> <span th:text="${pet.breed}"></span></p>
-          <p><strong>Status:</strong> <span th:text="${pet.status}"></span></p>
-          <a th:href="@{/pets/{id}(id=${pet.id})}" class="btn btn-sm btn-primary">View</a>
-        </div>
+<body>
+
+<nav class="nav">
+  <a href="/" class="nav-brand"><span>🐾</span> PawFind</a>
+  <div class="nav-links">
+    <a href="/">Home</a>
+    <a href="/pets" class="active">All Pets</a>
+    <a href="/add">Add Pet</a>
+    <a href="/admin/applications">Admin</a>
+  </div>
+</nav>
+
+<div class="container">
+  <div class="page-header">
+    <h2>All pets</h2>
+    <a href="/add" class="btn btn-primary">+ Add pet</a>
+  </div>
+
+  <div class="pet-grid">
+    <div class="pet-card" th:each="pet : ${pets}">
+      <img th:src="${pet.imageUrl}" alt="pet photo" onerror="this.src='https://placehold.co/400x220/f3f4f6/9ca3af?text=No+Photo'"/>
+      <div class="pet-card-body">
+        <h3 th:text="${pet.name}">Name</h3>
+        <p class="pet-card-meta" th:text="${pet.species} + ' · ' + ${pet.breed}">Species · Breed</p>
+      </div>
+      <div class="pet-card-footer">
+        <span class="badge badge-available" th:classappend="${pet.status == 'Available'} ? 'badge-available' : (${pet.status == 'Pending'} ? 'badge-pending' : 'badge-adopted')"
+              th:text="${pet.status}">Status</span>
+        <a th:href="@{/pets/{id}(id=${pet.id})}" class="btn btn-outline btn-sm">View →</a>
       </div>
     </div>
   </div>
+
+  <div class="empty" th:if="${#lists.isEmpty(pets)}">
+    <div class="empty-icon">🐾</div>
+    <h3>No pets found</h3>
+    <a href="/add" class="btn btn-primary" style="margin-top:1rem">Add a pet</a>
+  </div>
 </div>
+
 </body>
 </html>
